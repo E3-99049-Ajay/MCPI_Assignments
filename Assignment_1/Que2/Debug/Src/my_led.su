@@ -1,0 +1,9 @@
+../Src/my_led.c:11:6:led_on_green	4	static
+../Src/my_led.c:15:6:led_on_orange	4	static
+../Src/my_led.c:19:6:led_on_red	4	static
+../Src/my_led.c:23:6:led_on_blue	4	static
+../Src/my_led.c:28:6:led_off_green	4	static
+../Src/my_led.c:32:6:led_off_orange	4	static
+../Src/my_led.c:36:6:led_off_red	4	static
+../Src/my_led.c:40:6:led_off_blue	4	static
+../Src/my_led.c:46:6:led_init	4	static

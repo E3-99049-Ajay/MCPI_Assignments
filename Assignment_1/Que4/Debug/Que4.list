@@ -1,0 +1,629 @@
+
+Que4.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   00000188  08000000  08000000  00001000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         00000350  08000188  08000188  00001188  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       00000000  080004d8  080004d8  00002004  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .ARM.extab    00000000  080004d8  080004d8  00002004  2**0
+                  CONTENTS, READONLY
+  4 .ARM          00000000  080004d8  080004d8  00002004  2**0
+                  CONTENTS, READONLY
+  5 .preinit_array 00000000  080004d8  080004d8  00002004  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  080004d8  080004d8  000014d8  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  7 .fini_array   00000004  080004dc  080004dc  000014dc  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  8 .data         00000004  20000000  080004e0  00002000  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .ccmram       00000000  10000000  10000000  00002004  2**0
+                  CONTENTS
+ 10 .bss          0000001c  20000004  20000004  00002004  2**2
+                  ALLOC
+ 11 ._user_heap_stack 00000600  20000020  20000020  00002004  2**0
+                  ALLOC
+ 12 .ARM.attributes 0000002a  00000000  00000000  00002004  2**0
+                  CONTENTS, READONLY
+ 13 .debug_info   00000b1f  00000000  00000000  0000202e  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 14 .debug_abbrev 0000031e  00000000  00000000  00002b4d  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 15 .debug_aranges 000000c0  00000000  00000000  00002e70  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 16 .debug_rnglists 0000007e  00000000  00000000  00002f30  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 17 .debug_macro  00017fac  00000000  00000000  00002fae  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 18 .debug_line   0000105a  00000000  00000000  0001af5a  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 19 .debug_str    0008b7ec  00000000  00000000  0001bfb4  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 20 .comment      00000043  00000000  00000000  000a77a0  2**0
+                  CONTENTS, READONLY
+ 21 .debug_frame  00000178  00000000  00000000  000a77e4  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 22 .debug_loclists 00000025  00000000  00000000  000a795c  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 23 .debug_line_str 00000064  00000000  00000000  000a7981  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+
+Disassembly of section .text:
+
+08000188 <__do_global_dtors_aux>:
+ 8000188:	b510      	push	{r4, lr}
+ 800018a:	4c05      	ldr	r4, [pc, #20]	@ (80001a0 <__do_global_dtors_aux+0x18>)
+ 800018c:	7823      	ldrb	r3, [r4, #0]
+ 800018e:	b933      	cbnz	r3, 800019e <__do_global_dtors_aux+0x16>
+ 8000190:	4b04      	ldr	r3, [pc, #16]	@ (80001a4 <__do_global_dtors_aux+0x1c>)
+ 8000192:	b113      	cbz	r3, 800019a <__do_global_dtors_aux+0x12>
+ 8000194:	4804      	ldr	r0, [pc, #16]	@ (80001a8 <__do_global_dtors_aux+0x20>)
+ 8000196:	f3af 8000 	nop.w
+ 800019a:	2301      	movs	r3, #1
+ 800019c:	7023      	strb	r3, [r4, #0]
+ 800019e:	bd10      	pop	{r4, pc}
+ 80001a0:	20000004 	.word	0x20000004
+ 80001a4:	00000000 	.word	0x00000000
+ 80001a8:	080004c0 	.word	0x080004c0
+
+080001ac <frame_dummy>:
+ 80001ac:	b508      	push	{r3, lr}
+ 80001ae:	4b03      	ldr	r3, [pc, #12]	@ (80001bc <frame_dummy+0x10>)
+ 80001b0:	b11b      	cbz	r3, 80001ba <frame_dummy+0xe>
+ 80001b2:	4903      	ldr	r1, [pc, #12]	@ (80001c0 <frame_dummy+0x14>)
+ 80001b4:	4803      	ldr	r0, [pc, #12]	@ (80001c4 <frame_dummy+0x18>)
+ 80001b6:	f3af 8000 	nop.w
+ 80001ba:	bd08      	pop	{r3, pc}
+ 80001bc:	00000000 	.word	0x00000000
+ 80001c0:	20000008 	.word	0x20000008
+ 80001c4:	080004c0 	.word	0x080004c0
+
+080001c8 <main>:
+#if !defined(__SOFT_FP__) && defined(__ARM_FP)
+  #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
+#endif
+
+int main(void)
+{
+ 80001c8:	b580      	push	{r7, lr}
+ 80001ca:	af00      	add	r7, sp, #0
+	switch_init();
+ 80001cc:	f000 f85c 	bl	8000288 <switch_init>
+	led_init();
+ 80001d0:	f000 f82c 	bl	800022c <led_init>
+
+
+	while(1)
+	{
+		led_toggle();
+ 80001d4:	f000 f892 	bl	80002fc <led_toggle>
+ 80001d8:	e7fc      	b.n	80001d4 <main+0xc>
+	...
+
+080001dc <DelayMs>:
+
+void SwDelayMs(uint32_t ms);
+
+uint32_t DWT_Init(void);
+
+static inline void DelayMs(volatile uint32_t ms) {
+ 80001dc:	b480      	push	{r7}
+ 80001de:	b085      	sub	sp, #20
+ 80001e0:	af00      	add	r7, sp, #0
+ 80001e2:	6078      	str	r0, [r7, #4]
+	uint32_t init_ticks = DWT->CYCCNT;
+ 80001e4:	4b0e      	ldr	r3, [pc, #56]	@ (8000220 <DelayMs+0x44>)
+ 80001e6:	685b      	ldr	r3, [r3, #4]
+ 80001e8:	60fb      	str	r3, [r7, #12]
+	uint32_t ticks = (SystemCoreClock / 1000);
+ 80001ea:	4b0e      	ldr	r3, [pc, #56]	@ (8000224 <DelayMs+0x48>)
+ 80001ec:	681b      	ldr	r3, [r3, #0]
+ 80001ee:	4a0e      	ldr	r2, [pc, #56]	@ (8000228 <DelayMs+0x4c>)
+ 80001f0:	fba2 2303 	umull	r2, r3, r2, r3
+ 80001f4:	099b      	lsrs	r3, r3, #6
+ 80001f6:	60bb      	str	r3, [r7, #8]
+	ms *= ticks;
+ 80001f8:	687b      	ldr	r3, [r7, #4]
+ 80001fa:	68ba      	ldr	r2, [r7, #8]
+ 80001fc:	fb02 f303 	mul.w	r3, r2, r3
+ 8000200:	607b      	str	r3, [r7, #4]
+	while ((DWT->CYCCNT - init_ticks) < ms);
+ 8000202:	bf00      	nop
+ 8000204:	4b06      	ldr	r3, [pc, #24]	@ (8000220 <DelayMs+0x44>)
+ 8000206:	685a      	ldr	r2, [r3, #4]
+ 8000208:	68fb      	ldr	r3, [r7, #12]
+ 800020a:	1ad2      	subs	r2, r2, r3
+ 800020c:	687b      	ldr	r3, [r7, #4]
+ 800020e:	429a      	cmp	r2, r3
+ 8000210:	d3f8      	bcc.n	8000204 <DelayMs+0x28>
+}
+ 8000212:	bf00      	nop
+ 8000214:	bf00      	nop
+ 8000216:	3714      	adds	r7, #20
+ 8000218:	46bd      	mov	sp, r7
+ 800021a:	bc80      	pop	{r7}
+ 800021c:	4770      	bx	lr
+ 800021e:	bf00      	nop
+ 8000220:	e0001000 	.word	0xe0001000
+ 8000224:	20000000 	.word	0x20000000
+ 8000228:	10624dd3 	.word	0x10624dd3
+
+0800022c <led_init>:
+
+
+#include "my_led.h"
+
+void led_init()
+{
+ 800022c:	b480      	push	{r7}
+ 800022e:	af00      	add	r7, sp, #0
+	RCC->AHB1ENR |= BV(3);
+ 8000230:	4b13      	ldr	r3, [pc, #76]	@ (8000280 <led_init+0x54>)
+ 8000232:	6b1b      	ldr	r3, [r3, #48]	@ 0x30
+ 8000234:	4a12      	ldr	r2, [pc, #72]	@ (8000280 <led_init+0x54>)
+ 8000236:	f043 0308 	orr.w	r3, r3, #8
+ 800023a:	6313      	str	r3, [r2, #48]	@ 0x30
+
+	LED_PORT->MODER |= ( BV(24) | BV(26) | BV(28) | BV(30));
+ 800023c:	4b11      	ldr	r3, [pc, #68]	@ (8000284 <led_init+0x58>)
+ 800023e:	681b      	ldr	r3, [r3, #0]
+ 8000240:	4a10      	ldr	r2, [pc, #64]	@ (8000284 <led_init+0x58>)
+ 8000242:	f043 43aa 	orr.w	r3, r3, #1426063360	@ 0x55000000
+ 8000246:	6013      	str	r3, [r2, #0]
+	LED_PORT->MODER &= ~( BV(25) | BV(27) | BV(29) | BV(31));
+ 8000248:	4b0e      	ldr	r3, [pc, #56]	@ (8000284 <led_init+0x58>)
+ 800024a:	681b      	ldr	r3, [r3, #0]
+ 800024c:	4a0d      	ldr	r2, [pc, #52]	@ (8000284 <led_init+0x58>)
+ 800024e:	f023 432a 	bic.w	r3, r3, #2852126720	@ 0xaa000000
+ 8000252:	6013      	str	r3, [r2, #0]
+
+	LED_PORT->OSPEEDR &= ~(BV(24) | BV(25) | BV(26) | BV(27) | BV(28) | BV(29) | BV(30) | BV(31));
+ 8000254:	4b0b      	ldr	r3, [pc, #44]	@ (8000284 <led_init+0x58>)
+ 8000256:	689b      	ldr	r3, [r3, #8]
+ 8000258:	4a0a      	ldr	r2, [pc, #40]	@ (8000284 <led_init+0x58>)
+ 800025a:	f023 437f 	bic.w	r3, r3, #4278190080	@ 0xff000000
+ 800025e:	6093      	str	r3, [r2, #8]
+
+	LED_PORT->OTYPER &= ~(BV(12) | BV(13) | BV(14) | BV(15));
+ 8000260:	4b08      	ldr	r3, [pc, #32]	@ (8000284 <led_init+0x58>)
+ 8000262:	685b      	ldr	r3, [r3, #4]
+ 8000264:	4a07      	ldr	r2, [pc, #28]	@ (8000284 <led_init+0x58>)
+ 8000266:	f423 4370 	bic.w	r3, r3, #61440	@ 0xf000
+ 800026a:	6053      	str	r3, [r2, #4]
+
+	LED_PORT->PUPDR &= ~(BV(24) | BV(25) | BV(26) | BV(27) | BV(28) | BV(29) | BV(30) | BV(31));
+ 800026c:	4b05      	ldr	r3, [pc, #20]	@ (8000284 <led_init+0x58>)
+ 800026e:	68db      	ldr	r3, [r3, #12]
+ 8000270:	4a04      	ldr	r2, [pc, #16]	@ (8000284 <led_init+0x58>)
+ 8000272:	f023 437f 	bic.w	r3, r3, #4278190080	@ 0xff000000
+ 8000276:	60d3      	str	r3, [r2, #12]
+}
+ 8000278:	bf00      	nop
+ 800027a:	46bd      	mov	sp, r7
+ 800027c:	bc80      	pop	{r7}
+ 800027e:	4770      	bx	lr
+ 8000280:	40023800 	.word	0x40023800
+ 8000284:	40020c00 	.word	0x40020c00
+
+08000288 <switch_init>:
+
+void switch_init()
+{
+ 8000288:	b480      	push	{r7}
+ 800028a:	af00      	add	r7, sp, #0
+		RCC->AHB1ENR |= BV(0);
+ 800028c:	4b10      	ldr	r3, [pc, #64]	@ (80002d0 <switch_init+0x48>)
+ 800028e:	6b1b      	ldr	r3, [r3, #48]	@ 0x30
+ 8000290:	4a0f      	ldr	r2, [pc, #60]	@ (80002d0 <switch_init+0x48>)
+ 8000292:	f043 0301 	orr.w	r3, r3, #1
+ 8000296:	6313      	str	r3, [r2, #48]	@ 0x30
+
+
+		GPIOA->MODER &= ~( BV(0) | BV(1));
+ 8000298:	4b0e      	ldr	r3, [pc, #56]	@ (80002d4 <switch_init+0x4c>)
+ 800029a:	681b      	ldr	r3, [r3, #0]
+ 800029c:	4a0d      	ldr	r2, [pc, #52]	@ (80002d4 <switch_init+0x4c>)
+ 800029e:	f023 0303 	bic.w	r3, r3, #3
+ 80002a2:	6013      	str	r3, [r2, #0]
+
+		GPIOA->OTYPER &= ~( BV(0) | BV(1));
+ 80002a4:	4b0b      	ldr	r3, [pc, #44]	@ (80002d4 <switch_init+0x4c>)
+ 80002a6:	685b      	ldr	r3, [r3, #4]
+ 80002a8:	4a0a      	ldr	r2, [pc, #40]	@ (80002d4 <switch_init+0x4c>)
+ 80002aa:	f023 0303 	bic.w	r3, r3, #3
+ 80002ae:	6053      	str	r3, [r2, #4]
+
+		GPIOA->OSPEEDR &= ~( BV(0) | BV(1));
+ 80002b0:	4b08      	ldr	r3, [pc, #32]	@ (80002d4 <switch_init+0x4c>)
+ 80002b2:	689b      	ldr	r3, [r3, #8]
+ 80002b4:	4a07      	ldr	r2, [pc, #28]	@ (80002d4 <switch_init+0x4c>)
+ 80002b6:	f023 0303 	bic.w	r3, r3, #3
+ 80002ba:	6093      	str	r3, [r2, #8]
+
+		GPIOA->PUPDR &= ~(BV(0) | BV(1));
+ 80002bc:	4b05      	ldr	r3, [pc, #20]	@ (80002d4 <switch_init+0x4c>)
+ 80002be:	68db      	ldr	r3, [r3, #12]
+ 80002c0:	4a04      	ldr	r2, [pc, #16]	@ (80002d4 <switch_init+0x4c>)
+ 80002c2:	f023 0303 	bic.w	r3, r3, #3
+ 80002c6:	60d3      	str	r3, [r2, #12]
+}
+ 80002c8:	bf00      	nop
+ 80002ca:	46bd      	mov	sp, r7
+ 80002cc:	bc80      	pop	{r7}
+ 80002ce:	4770      	bx	lr
+ 80002d0:	40023800 	.word	0x40023800
+ 80002d4:	40020000 	.word	0x40020000
+
+080002d8 <is_switch_press>:
+int is_switch_press()
+{
+ 80002d8:	b480      	push	{r7}
+ 80002da:	af00      	add	r7, sp, #0
+	return (BV(0) & GPIOA->IDR) == 1?1:0;
+ 80002dc:	4b06      	ldr	r3, [pc, #24]	@ (80002f8 <is_switch_press+0x20>)
+ 80002de:	691b      	ldr	r3, [r3, #16]
+ 80002e0:	f003 0301 	and.w	r3, r3, #1
+ 80002e4:	2b01      	cmp	r3, #1
+ 80002e6:	bf0c      	ite	eq
+ 80002e8:	2301      	moveq	r3, #1
+ 80002ea:	2300      	movne	r3, #0
+ 80002ec:	b2db      	uxtb	r3, r3
+}
+ 80002ee:	4618      	mov	r0, r3
+ 80002f0:	46bd      	mov	sp, r7
+ 80002f2:	bc80      	pop	{r7}
+ 80002f4:	4770      	bx	lr
+ 80002f6:	bf00      	nop
+ 80002f8:	40020000 	.word	0x40020000
+
+080002fc <led_toggle>:
+
+
+void led_toggle()
+{
+ 80002fc:	b580      	push	{r7, lr}
+ 80002fe:	af00      	add	r7, sp, #0
+	if(is_switch_press())
+ 8000300:	f7ff ffea 	bl	80002d8 <is_switch_press>
+ 8000304:	4603      	mov	r3, r0
+ 8000306:	2b00      	cmp	r3, #0
+ 8000308:	d010      	beq.n	800032c <led_toggle+0x30>
+	{
+		LED_PORT->ODR |= BV(GREEN_LED);
+ 800030a:	4b2a      	ldr	r3, [pc, #168]	@ (80003b4 <led_toggle+0xb8>)
+ 800030c:	695b      	ldr	r3, [r3, #20]
+ 800030e:	4a29      	ldr	r2, [pc, #164]	@ (80003b4 <led_toggle+0xb8>)
+ 8000310:	f443 5380 	orr.w	r3, r3, #4096	@ 0x1000
+ 8000314:	6153      	str	r3, [r2, #20]
+		DelayMs(1000);
+ 8000316:	f44f 707a 	mov.w	r0, #1000	@ 0x3e8
+ 800031a:	f7ff ff5f 	bl	80001dc <DelayMs>
+		LED_PORT->ODR &= ~BV(GREEN_LED);
+ 800031e:	4b25      	ldr	r3, [pc, #148]	@ (80003b4 <led_toggle+0xb8>)
+ 8000320:	695b      	ldr	r3, [r3, #20]
+ 8000322:	4a24      	ldr	r2, [pc, #144]	@ (80003b4 <led_toggle+0xb8>)
+ 8000324:	f423 5380 	bic.w	r3, r3, #4096	@ 0x1000
+ 8000328:	6153      	str	r3, [r2, #20]
+
+
+	}
+
+
+}
+ 800032a:	e040      	b.n	80003ae <led_toggle+0xb2>
+	else if(is_switch_press())
+ 800032c:	f7ff ffd4 	bl	80002d8 <is_switch_press>
+ 8000330:	4603      	mov	r3, r0
+ 8000332:	2b00      	cmp	r3, #0
+ 8000334:	d010      	beq.n	8000358 <led_toggle+0x5c>
+		LED_PORT->ODR |= BV(ORANGE_LED);
+ 8000336:	4b1f      	ldr	r3, [pc, #124]	@ (80003b4 <led_toggle+0xb8>)
+ 8000338:	695b      	ldr	r3, [r3, #20]
+ 800033a:	4a1e      	ldr	r2, [pc, #120]	@ (80003b4 <led_toggle+0xb8>)
+ 800033c:	f443 5300 	orr.w	r3, r3, #8192	@ 0x2000
+ 8000340:	6153      	str	r3, [r2, #20]
+		DelayMs(1000);
+ 8000342:	f44f 707a 	mov.w	r0, #1000	@ 0x3e8
+ 8000346:	f7ff ff49 	bl	80001dc <DelayMs>
+		LED_PORT->ODR &= ~BV(ORANGE_LED);
+ 800034a:	4b1a      	ldr	r3, [pc, #104]	@ (80003b4 <led_toggle+0xb8>)
+ 800034c:	695b      	ldr	r3, [r3, #20]
+ 800034e:	4a19      	ldr	r2, [pc, #100]	@ (80003b4 <led_toggle+0xb8>)
+ 8000350:	f423 5300 	bic.w	r3, r3, #8192	@ 0x2000
+ 8000354:	6153      	str	r3, [r2, #20]
+}
+ 8000356:	e02a      	b.n	80003ae <led_toggle+0xb2>
+	else if(is_switch_press())
+ 8000358:	f7ff ffbe 	bl	80002d8 <is_switch_press>
+ 800035c:	4603      	mov	r3, r0
+ 800035e:	2b00      	cmp	r3, #0
+ 8000360:	d010      	beq.n	8000384 <led_toggle+0x88>
+		LED_PORT->ODR |= BV(RED_LED);
+ 8000362:	4b14      	ldr	r3, [pc, #80]	@ (80003b4 <led_toggle+0xb8>)
+ 8000364:	695b      	ldr	r3, [r3, #20]
+ 8000366:	4a13      	ldr	r2, [pc, #76]	@ (80003b4 <led_toggle+0xb8>)
+ 8000368:	f443 4380 	orr.w	r3, r3, #16384	@ 0x4000
+ 800036c:	6153      	str	r3, [r2, #20]
+		DelayMs(1000);
+ 800036e:	f44f 707a 	mov.w	r0, #1000	@ 0x3e8
+ 8000372:	f7ff ff33 	bl	80001dc <DelayMs>
+		LED_PORT->ODR &= ~BV(RED_LED);
+ 8000376:	4b0f      	ldr	r3, [pc, #60]	@ (80003b4 <led_toggle+0xb8>)
+ 8000378:	695b      	ldr	r3, [r3, #20]
+ 800037a:	4a0e      	ldr	r2, [pc, #56]	@ (80003b4 <led_toggle+0xb8>)
+ 800037c:	f423 4380 	bic.w	r3, r3, #16384	@ 0x4000
+ 8000380:	6153      	str	r3, [r2, #20]
+}
+ 8000382:	e014      	b.n	80003ae <led_toggle+0xb2>
+	else if(is_switch_press())
+ 8000384:	f7ff ffa8 	bl	80002d8 <is_switch_press>
+ 8000388:	4603      	mov	r3, r0
+ 800038a:	2b00      	cmp	r3, #0
+ 800038c:	d00f      	beq.n	80003ae <led_toggle+0xb2>
+		LED_PORT->ODR |= BV(BLUE_LED);
+ 800038e:	4b09      	ldr	r3, [pc, #36]	@ (80003b4 <led_toggle+0xb8>)
+ 8000390:	695b      	ldr	r3, [r3, #20]
+ 8000392:	4a08      	ldr	r2, [pc, #32]	@ (80003b4 <led_toggle+0xb8>)
+ 8000394:	f443 4300 	orr.w	r3, r3, #32768	@ 0x8000
+ 8000398:	6153      	str	r3, [r2, #20]
+		DelayMs(1000);
+ 800039a:	f44f 707a 	mov.w	r0, #1000	@ 0x3e8
+ 800039e:	f7ff ff1d 	bl	80001dc <DelayMs>
+		LED_PORT->ODR &= ~BV(BLUE_LED);
+ 80003a2:	4b04      	ldr	r3, [pc, #16]	@ (80003b4 <led_toggle+0xb8>)
+ 80003a4:	695b      	ldr	r3, [r3, #20]
+ 80003a6:	4a03      	ldr	r2, [pc, #12]	@ (80003b4 <led_toggle+0xb8>)
+ 80003a8:	f423 4300 	bic.w	r3, r3, #32768	@ 0x8000
+ 80003ac:	6153      	str	r3, [r2, #20]
+}
+ 80003ae:	bf00      	nop
+ 80003b0:	bd80      	pop	{r7, pc}
+ 80003b2:	bf00      	nop
+ 80003b4:	40020c00 	.word	0x40020c00
+
+080003b8 <SystemInit>:
+  *         configuration.
+  * @param  None
+  * @retval None
+  */
+void SystemInit(void)
+{
+ 80003b8:	b580      	push	{r7, lr}
+ 80003ba:	af00      	add	r7, sp, #0
+  /* Configure the Vector Table location -------------------------------------*/
+#if defined(USER_VECT_TAB_ADDRESS)
+  SCB->VTOR = VECT_TAB_BASE_ADDRESS | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */
+#endif /* USER_VECT_TAB_ADDRESS */
+
+  DWT_Init();
+ 80003bc:	f000 f802 	bl	80003c4 <DWT_Init>
+}
+ 80003c0:	bf00      	nop
+ 80003c2:	bd80      	pop	{r7, pc}
+
+080003c4 <DWT_Init>:
+}
+#pragma GCC pop_options
+
+
+uint32_t DWT_Init(void)
+{
+ 80003c4:	b480      	push	{r7}
+ 80003c6:	af00      	add	r7, sp, #0
+    /* Disable TRC */
+    CoreDebug->DEMCR &= ~CoreDebug_DEMCR_TRCENA_Msk; // ~0x01000000;
+ 80003c8:	4b14      	ldr	r3, [pc, #80]	@ (800041c <DWT_Init+0x58>)
+ 80003ca:	68db      	ldr	r3, [r3, #12]
+ 80003cc:	4a13      	ldr	r2, [pc, #76]	@ (800041c <DWT_Init+0x58>)
+ 80003ce:	f023 7380 	bic.w	r3, r3, #16777216	@ 0x1000000
+ 80003d2:	60d3      	str	r3, [r2, #12]
+    /* Enable TRC */
+    CoreDebug->DEMCR |=  CoreDebug_DEMCR_TRCENA_Msk; // 0x01000000;
+ 80003d4:	4b11      	ldr	r3, [pc, #68]	@ (800041c <DWT_Init+0x58>)
+ 80003d6:	68db      	ldr	r3, [r3, #12]
+ 80003d8:	4a10      	ldr	r2, [pc, #64]	@ (800041c <DWT_Init+0x58>)
+ 80003da:	f043 7380 	orr.w	r3, r3, #16777216	@ 0x1000000
+ 80003de:	60d3      	str	r3, [r2, #12]
+    /* Disable clock cycle counter */
+    DWT->CTRL &= ~DWT_CTRL_CYCCNTENA_Msk; //~0x00000001;
+ 80003e0:	4b0f      	ldr	r3, [pc, #60]	@ (8000420 <DWT_Init+0x5c>)
+ 80003e2:	681b      	ldr	r3, [r3, #0]
+ 80003e4:	4a0e      	ldr	r2, [pc, #56]	@ (8000420 <DWT_Init+0x5c>)
+ 80003e6:	f023 0301 	bic.w	r3, r3, #1
+ 80003ea:	6013      	str	r3, [r2, #0]
+    /* Enable  clock cycle counter */
+    DWT->CTRL |=  DWT_CTRL_CYCCNTENA_Msk; //0x00000001;
+ 80003ec:	4b0c      	ldr	r3, [pc, #48]	@ (8000420 <DWT_Init+0x5c>)
+ 80003ee:	681b      	ldr	r3, [r3, #0]
+ 80003f0:	4a0b      	ldr	r2, [pc, #44]	@ (8000420 <DWT_Init+0x5c>)
+ 80003f2:	f043 0301 	orr.w	r3, r3, #1
+ 80003f6:	6013      	str	r3, [r2, #0]
+    /* Reset the clock cycle counter value */
+    DWT->CYCCNT = 0;
+ 80003f8:	4b09      	ldr	r3, [pc, #36]	@ (8000420 <DWT_Init+0x5c>)
+ 80003fa:	2200      	movs	r2, #0
+ 80003fc:	605a      	str	r2, [r3, #4]
+    /* 3 NO OPERATION instructions */
+    __ASM volatile ("NOP");
+ 80003fe:	bf00      	nop
+    __ASM volatile ("NOP");
+ 8000400:	bf00      	nop
+    __ASM volatile ("NOP");
+ 8000402:	bf00      	nop
+    /* Check if clock cycle counter has started: 0 on success */
+    return !(DWT->CYCCNT);
+ 8000404:	4b06      	ldr	r3, [pc, #24]	@ (8000420 <DWT_Init+0x5c>)
+ 8000406:	685b      	ldr	r3, [r3, #4]
+ 8000408:	2b00      	cmp	r3, #0
+ 800040a:	bf0c      	ite	eq
+ 800040c:	2301      	moveq	r3, #1
+ 800040e:	2300      	movne	r3, #0
+ 8000410:	b2db      	uxtb	r3, r3
+}
+ 8000412:	4618      	mov	r0, r3
+ 8000414:	46bd      	mov	sp, r7
+ 8000416:	bc80      	pop	{r7}
+ 8000418:	4770      	bx	lr
+ 800041a:	bf00      	nop
+ 800041c:	e000edf0 	.word	0xe000edf0
+ 8000420:	e0001000 	.word	0xe0001000
+
+08000424 <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   r0, =_estack
+ 8000424:	480d      	ldr	r0, [pc, #52]	@ (800045c <LoopForever+0x2>)
+  mov   sp, r0          /* set stack pointer */
+ 8000426:	4685      	mov	sp, r0
+/* Call the clock system initialization function.*/
+  bl  SystemInit
+ 8000428:	f7ff ffc6 	bl	80003b8 <SystemInit>
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+ 800042c:	480c      	ldr	r0, [pc, #48]	@ (8000460 <LoopForever+0x6>)
+  ldr r1, =_edata
+ 800042e:	490d      	ldr	r1, [pc, #52]	@ (8000464 <LoopForever+0xa>)
+  ldr r2, =_sidata
+ 8000430:	4a0d      	ldr	r2, [pc, #52]	@ (8000468 <LoopForever+0xe>)
+  movs r3, #0
+ 8000432:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 8000434:	e002      	b.n	800043c <LoopCopyDataInit>
+
+08000436 <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 8000436:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 8000438:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 800043a:	3304      	adds	r3, #4
+
+0800043c <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 800043c:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 800043e:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 8000440:	d3f9      	bcc.n	8000436 <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 8000442:	4a0a      	ldr	r2, [pc, #40]	@ (800046c <LoopForever+0x12>)
+  ldr r4, =_ebss
+ 8000444:	4c0a      	ldr	r4, [pc, #40]	@ (8000470 <LoopForever+0x16>)
+  movs r3, #0
+ 8000446:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 8000448:	e001      	b.n	800044e <LoopFillZerobss>
+
+0800044a <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 800044a:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 800044c:	3204      	adds	r2, #4
+
+0800044e <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 800044e:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 8000450:	d3fb      	bcc.n	800044a <FillZerobss>
+
+
+/* Call static constructors */
+  bl __libc_init_array
+ 8000452:	f000 f811 	bl	8000478 <__libc_init_array>
+/* Call the application's entry point.*/
+
+  bl main
+ 8000456:	f7ff feb7 	bl	80001c8 <main>
+
+0800045a <LoopForever>:
+
+LoopForever:
+  b LoopForever
+ 800045a:	e7fe      	b.n	800045a <LoopForever>
+  ldr   r0, =_estack
+ 800045c:	20020000 	.word	0x20020000
+  ldr r0, =_sdata
+ 8000460:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 8000464:	20000004 	.word	0x20000004
+  ldr r2, =_sidata
+ 8000468:	080004e0 	.word	0x080004e0
+  ldr r2, =_sbss
+ 800046c:	20000004 	.word	0x20000004
+  ldr r4, =_ebss
+ 8000470:	20000020 	.word	0x20000020
+
+08000474 <ADC_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+ 8000474:	e7fe      	b.n	8000474 <ADC_IRQHandler>
+	...
+
+08000478 <__libc_init_array>:
+ 8000478:	b570      	push	{r4, r5, r6, lr}
+ 800047a:	4b0d      	ldr	r3, [pc, #52]	@ (80004b0 <__libc_init_array+0x38>)
+ 800047c:	4d0d      	ldr	r5, [pc, #52]	@ (80004b4 <__libc_init_array+0x3c>)
+ 800047e:	1b5b      	subs	r3, r3, r5
+ 8000480:	109c      	asrs	r4, r3, #2
+ 8000482:	2600      	movs	r6, #0
+ 8000484:	42a6      	cmp	r6, r4
+ 8000486:	d109      	bne.n	800049c <__libc_init_array+0x24>
+ 8000488:	f000 f81a 	bl	80004c0 <_init>
+ 800048c:	4d0a      	ldr	r5, [pc, #40]	@ (80004b8 <__libc_init_array+0x40>)
+ 800048e:	4b0b      	ldr	r3, [pc, #44]	@ (80004bc <__libc_init_array+0x44>)
+ 8000490:	1b5b      	subs	r3, r3, r5
+ 8000492:	109c      	asrs	r4, r3, #2
+ 8000494:	2600      	movs	r6, #0
+ 8000496:	42a6      	cmp	r6, r4
+ 8000498:	d105      	bne.n	80004a6 <__libc_init_array+0x2e>
+ 800049a:	bd70      	pop	{r4, r5, r6, pc}
+ 800049c:	f855 3b04 	ldr.w	r3, [r5], #4
+ 80004a0:	4798      	blx	r3
+ 80004a2:	3601      	adds	r6, #1
+ 80004a4:	e7ee      	b.n	8000484 <__libc_init_array+0xc>
+ 80004a6:	f855 3b04 	ldr.w	r3, [r5], #4
+ 80004aa:	4798      	blx	r3
+ 80004ac:	3601      	adds	r6, #1
+ 80004ae:	e7f2      	b.n	8000496 <__libc_init_array+0x1e>
+ 80004b0:	080004d8 	.word	0x080004d8
+ 80004b4:	080004d8 	.word	0x080004d8
+ 80004b8:	080004d8 	.word	0x080004d8
+ 80004bc:	080004dc 	.word	0x080004dc
+
+080004c0 <_init>:
+ 80004c0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 80004c2:	bf00      	nop
+ 80004c4:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 80004c6:	bc08      	pop	{r3}
+ 80004c8:	469e      	mov	lr, r3
+ 80004ca:	4770      	bx	lr
+
+080004cc <_fini>:
+ 80004cc:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 80004ce:	bf00      	nop
+ 80004d0:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 80004d2:	bc08      	pop	{r3}
+ 80004d4:	469e      	mov	lr, r3
+ 80004d6:	4770      	bx	lr
